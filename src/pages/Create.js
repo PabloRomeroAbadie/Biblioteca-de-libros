@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import Layout from '../components/Layout';
+import { useAppContext } from '../store/Store';
+import {useNavigate} from "react-router-dom"
 
 const Create = () => {
     const [title, setTitle] = useState("");
@@ -7,6 +10,10 @@ const Create = () => {
     const [intro, setIntro] = useState("");
     const [completed, setCompleted] = useState(false);
     const [review, setReview] = useState("");
+
+    //le ponemos un nombre a nuestro contexto y mandamos a llamar a la funcion
+    const store = useAppContext(); 
+    const navigate = useNavigate();
 
     function handleChange(e){
         const name = e.target.name;
@@ -28,7 +35,6 @@ const Create = () => {
             case "review": 
             setReview(value);
             break;
-
             default:
         }
     }
@@ -64,10 +70,12 @@ const Create = () => {
         };
 
         //Todo: mandar a registrar libro
+        store.createItem(newBook);
+        navigate("/");
     }
 
     return (
-        <div>
+        <Layout>
             <form onSubmit={handleSubmit}>
                 <div>
                     <div>Title</div>
@@ -82,7 +90,7 @@ const Create = () => {
                 <div>
                     <div>Cover</div>
                     <input type="file" name="cover" onChange={handleOnChangeFile}/>
-                    <div></div>
+                    <div>{!!cover ? <img src={cover} width="200" alt="preview" /> : ""}</div>
                 </div>
 
                 <div>
@@ -102,7 +110,7 @@ const Create = () => {
 
                 <input type="submit" value="Register Book" />
             </form>
-        </div>
+            </Layout>
     );
 };
 
